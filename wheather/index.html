@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        *{
+            padding:0;
+            margin:0;
+            text-decoration: none;
+            list-style: none;
+        }
+        body{
+            background: url("bac1.jpg") no-repeat center center;
+            background-size:100% 100%;
+        }
+        .btn{
+            width: 20vw;
+            height:5vh;
+            line-height: 5vh;
+            font-size: 12px;
+            color: #edeeee;
+            border-radius: 8px;
+            background: #0AA6E8;
+            text-align: center;
+            cursor: pointer;
+            margin:2vh 5vw;
+
+        }
+        .title{
+            width: 100%;
+            height:15vh;
+            line-height: 15vh;
+            text-align: center;
+            font-size: 16px;
+            color:#000000;
+        }
+        .message{
+            width: 100%;
+            height:20vh;
+            background:rgba(176,179,200,0.6);
+            color: #fff;
+            position: relative;
+            padding-left: 2vw;
+        }
+        .message .static{
+             font-size: 20px;
+             color:#fff;
+        }
+        .message .timp{
+            height:5vh;
+            font-size: 25px;
+            color:#fff;
+            margin-left: 6vw;
+        }
+        .timp span{
+            float: left;
+        }
+        .timp .low-heigh{
+            float: left;
+            margin-left:5vw;
+            line-height: 5vh;
+        }
+        .message .low-heigh{
+            font-size: 16px;
+            color:#fff;
+        }
+        .wind{
+            height:4vh;
+            color:#fff;
+            line-height:4vh;
+        }
+        .winddirect{
+            font-size: 14px;
+            float: left;
+        }
+        .winddirect-lv{
+            font-size:12px;
+            float: left;
+            margin-left: 4vw;
+
+        }
+        .time{
+            font-size: 10px;
+            color:#fff;
+        }
+        .time span{
+             font-size: 8px;
+            color:#fff;
+        }
+        .wheather-img{
+             position: absolute;
+            top:2vh;
+            right:4vw;
+            width: 11vw;
+            height:6vh;
+        }
+        .wheather-img img{
+            width: 100%;
+            height:100%;
+        }
+        .temp-line{
+            width: 100%;
+            height:30vh;
+            background:rgba(176,179,200,0.6);
+        }
+        #main{
+            width:100%;
+            height:100%;
+        }
+        .daily{
+            width: 100%;
+            height:30vh;
+            background:rgba(176,179,200,0.6);
+            font-size: 14px;
+            color:#fff;
+            box-sizing: border-box;
+        }
+        .daily table{
+            width: 100%;
+            height:100%;
+            text-align: center;
+            border-collapse: collapse;
+
+        }
+        .daily table th,tr,td{
+            border:1px solid #ccc;
+        }
+        table tr{
+            height:2vh;
+            padding:0;
+        }
+        table td{
+            font-size: 8px;
+        }
+        table td img{
+            width:2vw;
+            height:2vh;
+        }
+        table thead{
+            height:3vh;
+            line-height: 3vh;
+        }
+        table tbody{
+            width: 100%;
+            height:24vh;
+        }
+        .mask {
+            width: 100vw;
+            height: 100vh;
+            position: absolute;
+            left: 0;
+            top: 0;
+            background: rgba(194, 221, 248,0.7);
+            display: none;
+            color:#fff;
+            font-weight: 400;
+            padding:2vh 2vw;
+        }
+        .mask div{
+            width:15vw;
+            height:8vh;
+            background: #00b1ff;
+            float:left;
+            text-align: center;
+            margin:2vh 2vw;
+            line-height: 10vh;
+            border-radius: 5px;
+            margin-right: 1vw;
+            box-shadow: 1px 1px 2px #31fffa;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+   <div class="btn">选择</div>
+   <h3 class="title"><span class="city"></span><span>天气预报</span></h3>
+   <div class="message">
+       <!--<span class="static">晴</span>-->
+       <!--<div class="timp">-->
+           <!--<span>25℃</span>-->
+           <!--<div class="low-heigh">-->
+               <!--<span class="templow">-3℃</span>-->
+               <!--<span>~</span>-->
+               <!--<span class="tempheigh">-9℃</span>-->
+           <!--</div>-->
+       <!--</div>-->
+       <!--<div class="wind">-->
+           <!--<div class="winddirect">西风</div>-->
+           <!--<div class="winddirect-lv">3级</div>-->
+       <!--</div>-->
+       <!--<div class="time">2018/2/1 <span>更新</span></div>-->
+       <!--<div class="wheather-img">-->
+           <!--<img src="wheather-img/weathercn/0.png" alt="">-->
+       <!--</div>-->
+   </div>
+   <div class="temp-line">
+       <div id="main"></div>
+   </div>
+   <div class="daily">
+       <table>
+           <thead>
+           <th>日期</th>
+           <th>天气</th>
+           <th>图片</th>
+           <th>气温</th>
+           </thead>
+           <tbody>
+           </tbody>
+       </table>
+   </div>
+    <div class="mask">
+    </div>
+</body>
+</html>
+<script src="jquery-3.2.1.js"></script>
+<script src="echarts.min.js"></script>
+<script>
+     $.getScript("http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js&ip",function(){
+         var city=remote_ip_info.city;
+         $(".city").html(city);
+         getData(city);
+     })
+
+    function getData(city){
+//         基本天气情况
+        $.ajax({
+            url:"http://api.jisuapi.com/weather/query?appkey=ab287538377a856d",
+            data:{city},
+            dataType:"jsonp",
+            success:function(r){
+                let data=r.result;
+//                console.log(data)
+                let str=`
+                    <span class="static">${data.weather}</span>
+       <div class="timp">
+           <span>${data.temp}℃</span>
+           <div class="low-heigh">
+               <span class="templow">${data.temphigh}℃</span>
+               <span>~</span>
+               <span class="tempheigh">${data.templow}℃</span>
+           </div>
+       </div>
+       <div class="wind">
+           <div class="winddirect">${data.winddirect}</div>
+           <div class="winddirect-lv">${data.windpower}</div>
+       </div>
+       <div class="time">${data.aqi.timepoint} <span>更新</span></div>
+       <div class="wheather-img">
+           <img src="wheather-img/weathercn/${data.img}.png" alt="">
+       </div>
+                `;
+                $(".message").html(str);
+                  //星期
+                var strDaily="";
+                let dataDaily=r.result.daily;
+//                console.log(dataDaily);
+                $.each(dataDaily,function(index,val){
+                    strDaily+=`
+                      <tr>
+                        <td>${val.date}/${val.week}</td>
+                        <td>${val.day.weather}</td>
+                        <td><img src="wheather-img/weathercn/${val.day.img}.png" alt=""></td>
+                        <td>${val.night.templow}℃/${val.day.temphigh}℃</td>
+</tr>
+                    `;
+                });
+                $("tbody").html(strDaily);
+                var arr1=[], arr2=[];
+                var dataHourly=r.result.hourly;
+//                console.log(dataHourly);
+                $.each(dataHourly,function(index,val){
+                    arr1.push(val.time);
+                    arr2.push(val.temp);
+                });
+                arr1.slice(0, 7);
+                arr2.slice(0, 7);
+
+                setCharts(arr1,arr2);
+            },
+
+        })
+    }
+    function setCharts(arr1,arr2){
+        var myChart=echarts.init(document.getElementById('main'));
+        var option={
+            xAxis: {
+                type: 'category',
+                data: arr1
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [{
+                data: arr2,
+                type: 'line'
+            }]
+        };
+        myChart.setOption(option);
+    }
+    //选择城市
+     var city=[];
+     $(".btn").on("click",function () {
+         $(".mask").show();
+         $.ajax({
+             url: "http://api.jisuapi.com/weather/city?appkey=ab287538377a856d",
+             dataType: "jsonp",
+             success: function (r) {
+                 city=r.result;
+                 var province=$.grep(city,function(ele,index){
+                     if(ele.parentid==="0"){
+                         return true;
+                     }
+                 });
+                 var str="";
+                 $.each(province,function(index,val){
+                     str+=`
+                    <div id="${val.cityid}" class="province">${val.city}</div>
+                  `
+                 });
+//                 console.log(str);
+                 $(".mask").html(str);
+             }
+         })
+     });
+     $(".mask").on("click",".province",function() {
+         var id = $(this).attr("id");
+         var area = $.grep(city, function (val, index) {
+             if (val.parentid === id) {
+                 return true;
+             }
+         });
+             var str = "";
+//             console.log(area)
+             $.each(area, function (index, val) {
+                 str += `
+            <div class="city">${val.city}</div>
+          `
+             });
+//             console.log(str)
+             $(".mask").html(str);
+         });
+         $(".mask").on("click",".city",function(){
+             var name=$(this).html();
+             $(".mask").empty().hide();
+             $(".city").html(name);
+             getData(name);
+         })
+//d3   echarts   做图片的
+    //$.grep   过滤    $(".mask").empty();
+</script>
