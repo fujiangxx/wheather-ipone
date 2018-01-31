@@ -219,7 +219,7 @@
 <script src="jquery-3.2.1.js"></script>
 <script src="echarts.min.js"></script>
 <script>
-     $.getScript("https://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js&ip",function(){
+     $.getScript("http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js&ip",function(){
          var city=remote_ip_info.city;
          $(".city").html(city);
          getData(city);
@@ -228,7 +228,7 @@
     function getData(city){
 //         基本天气情况
         $.ajax({
-            url:"https://api.jisuapi.com/weather/query?appkey=ab287538377a856d",
+            url:"http://api.jisuapi.com/weather/query?appkey=ab287538377a856d",
             data:{city},
             dataType:"jsonp",
             success:function(r){
@@ -306,7 +306,7 @@
      $(".btn").on("click",function () {
          $(".mask").show();
          $.ajax({
-             url: "https://api.jisuapi.com/weather/city?appkey=ab287538377a856d",
+             url: "http://api.jisuapi.com/weather/city?appkey=ab287538377a856d",
              dataType: "jsonp",
              success: function (r) {
                  city=r.result;
